@@ -14,4 +14,4 @@ new_york_city.csv \
 washington.csv
 
 ### Credits
-The autor would like to thank the pandas documentation
+The author would like to thank the pandas documentation
