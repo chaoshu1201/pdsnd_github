@@ -65,6 +65,26 @@ def load_data(city, month, day):
     Returns:
         df - Pandas DataFrame containing city data filtered by month and day
     """
+    # Process version compatibility for pandas
+    pandas_version = pd.__version__
+    print("The version of pandas you are using is {}.".format(pandas_version))
+    ver_int_lst = [int(x) for x in pandas_version.split('.')]
+    if ver_int_lst[0] > 0:
+        new_ver_flag = True
+    elif ver_int_lst[1] >= 23:
+        new_ver_flag = True
+    else:
+        new_ver_flag = False
+
+    if not new_ver_flag:
+        print("The version of pandas you are using is too old!")
+        print("PLEASE NOTE that dt.day_name should be used to obtain day of week instead of")
+        print("dt.weekday_name which is used in practice solution#3, because")
+        print("dt.weekday_name is deprecated since Pandas 0.23.0")
+        print("AND the Project Workspace provided in the classroom is using 0.23.3!")
+        print("Since you are using an old version of pandas, weekday_name will be used later. But I do not have env to "
+              "test it!")
+        print("Please read my readme.txt for details.\n")
 
     # Preprocess the input
     city = city.lower()
@@ -85,7 +105,10 @@ def load_data(city, month, day):
 
     # extract month and day of week from Start Time to create new columns
     bike_data_df['month'] = bike_data_df['Start Time'].dt.month
-    bike_data_df['day_of_week'] = bike_data_df['Start Time'].dt.day_name()
+    if not new_ver_flag:
+        bike_data_df['day_of_week'] = bike_data_df['Start Time'].dt.weekday_name()
+    else:
+        bike_data_df['day_of_week'] = bike_data_df['Start Time'].dt.day_name()
     bike_data_df['hour'] = bike_data_df['Start Time'].dt.hour
 
     # filter by month if applicable
